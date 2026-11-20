@@ -110,6 +110,14 @@ const graph = [organization, website, breadcrumbSchema, ...jsonLd].filter(Boolea
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/images/icon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!-- GA4 analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SLN397942Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-SLN397942Q');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Perf: preconnect to remote image CDN (product/scene images hot-linked) -->
@@ -132,6 +140,7 @@ const graph = [organization, website, breadcrumbSchema, ...jsonLd].filter(Boolea
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap"
       />
     </noscript>
+
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     <slot name="head" />
   </head>
