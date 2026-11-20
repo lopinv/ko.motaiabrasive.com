@@ -1,0 +1,37 @@
+---
+import { SITE } from '../data/site';
+
+// 내장 맵 URL은 중국어 주소(후베이성 시안닝시 퉁청현 군수진 위리대로 88호, z=17) 사용 — Google Maps에서 영문 주소는 위치 정확도 부족
+const mapsOpenUrl = 'https://maps.google.com/maps?q=%E6%B9%96%E5%8C%97%E7%9C%81%E5%92%B3%E5%AE%81%E5%B8%82%E9%80%9A%E5%9F%8E%E5%8E%BF%E9%9A%BD%E6%B0%B4%E9%95%87%E7%8E%89%E7%AB%8B%E5%A4%A7%E9%81%9388%E5%8F%B7&z=17';
+const mapsEmbedUrl = `${mapsOpenUrl}&output=embed`;
+---
+
+<section class="section section--alt location-map" data-reveal>
+  <div class="container location-map__grid">
+    <div>
+      <span class="eyebrow">당사 위치</span>
+      <h2>지도에서 보기: 공장 위치</h2>
+      <p>
+        墨泰 공장은 중국 후베이성 시안닝시 통청현 군수진에 위치해 있습니다.
+        스펙과 일정을 소통팀과 확인한 후 방문 또는 배송을 조율해 드립니다.
+      </p>
+      <address dir="ltr">{SITE.addressAr}</address>
+      <a
+        href={mapsOpenUrl}
+        target="_blank"
+        rel="noopener nofollow"
+        dir="ltr"
+        class="button button--outline button--sm location-map__link"
+      >
+        Google Maps에서 열기
+      </a>
+    </div>
+    <iframe
+      class="location-map__frame"
+      src={mapsEmbedUrl}
+      title="墨泰 공장 위치 지도"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  </div>
+</section>

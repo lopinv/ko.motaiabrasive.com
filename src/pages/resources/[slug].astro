@@ -1,0 +1,114 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+import { resources, SITE } from '../../data/site';
+
+export function getStaticPaths() {
+  return resources.map((resource) => ({ params: { slug: resource.slug }, props: { resource } }));
+}
+
+const { resource } = Astro.props;
+const breadcrumbs = [
+  { name: '홈', href: '/' },
+  { name: '리소스', href: '/resources' },
+  { name: resource.title, href: `/resources/${resource.slug}` },
+];
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: resource.title,
+  description: resource.description,
+  image: new URL(resource.image, Astro.site).href,
+  inLanguage: 'ko',
+  author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  publisher: { '@id': `${SITE.url}/#organization` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.url}/resources/${resource.slug}` },
+};
+---
+
+<Layout
+  title={`${resource.title} | 墨泰 연마재`}
+  description={`${resource.title}: 구매팀이 정확한 스펙을 준비하는 데 도움이 되는 실무 정보. 墨泰에게 연락하기 전 명확한 단계 안내.`}
+  image={resource.image}
+  breadcrumbs={breadcrumbs}
+  jsonLd={[articleJsonLd]}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="page-hero page-hero--image">
+    <div class="container page-hero__inner">
+      <span class="eyebrow eyebrow--light">{resource.type}</span>
+      <h1>{resource.title}</h1>
+      <p>{resource.description}</p>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container resource-layout">
+      <article class="resource-article">
+        <div class="content-block">
+          <span class="eyebrow">실무 요약</span>
+          <h2>이 가이드가 무엇을 확정하나요?</h2>
+          <p>
+            {resource.description} 이 정보를 활용해 더 구체화된 주문을 준비하면,
+            반복 문의가 줄고 가장 적합한 스펙과 견적에 더 빠르게 도달할 수 있습니다.
+          </p>
+        </div>
+        {
+          resource.sections.map((section, index) => (
+            <div class="content-block">
+              <span class="eyebrow">{index + 1}부</span>
+              <h2>{section.title}</h2>
+              <ol class="numbered-list">
+                {section.items.map((item) => <li>{item}</li>)}
+              </ol>
+            </div>
+          ))
+        }
+        <div class="content-block">
+          <span class="eyebrow">다음 단계</span>
+          <h2>정보를 견적 가능한 스펙으로 전환하세요</h2>
+          <p>
+            리스트를 준비한 후, 수량과 배송 목적지와 함께 문의 양식으로 보내 주십시오.
+            검토 후 가공에 적합한 내용을 안내해 드립니다.
+          </p>
+          <a class="button button--primary" href="/quote">견적 요청 시작</a>
+        </div>
+      </article>
+
+      <aside class="resource-sidebar">
+        <div class="sidebar-card">
+          <h3>빠른 정보</h3>
+          <dl class="spec-dl">
+            <div><dt>가이드 종류</dt><dd>{resource.type}</dd></div>
+            <div><dt>언어</dt><dd>한국어</dd></div>
+            <div><dt>용도</dt><dd>견적 요청 준비</dd></div>
+          </dl>
+        </div>
+        <div class="sidebar-card sidebar-card--soft">
+          <h3>다른 리소스</h3>
+          <ul class="plain-links">
+            {
+              resources
+                .filter((item) => item.slug !== resource.slug)
+                .map((item) => <li><a href={`/resources/${item.slug}`}>{item.title} →</a></li>)
+            }
+            <li><a href="/products/abrasive-belts">샌딩 벨트 →</a></li>
+            <li><a href="/industries">산업 솔루션 →</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <RelatedArticles limit={3} />
+    </div>
+  </section>
+
+  <CtaBand title="가이드에 포함되지 않은 질문이 있으신가요?" text="기술 문의를 보내 주시면, 적합한 스펙과 함께 답변해 드립니다." />
+</Layout>

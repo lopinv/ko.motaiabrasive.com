@@ -1,0 +1,157 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { productCategories } from '../../data/site';
+import { models } from '../../data/models';
+
+const beltModels = models.filter((model) => model.categorySlug === 'abrasive-belts');
+const discModels = models.filter((model) => model.categorySlug === 'sanding-discs');
+---
+
+<Layout
+  title="연마재 제품 | 벨트·디스크·스펀지 | 墨泰"
+  description="墨泰의 샌딩 벨트, 플랩 디스크, 메시 디스크, 샌딩 스펀지를 확인하세요. 스펙, 적용 분야, 커스텀 옵션을 함께 살펴 적합한 제품을 결정하는 데 도움 드립니다."
+  image="/images/workshop.jpg"
+>
+  <section class="page-hero page-hero--products">
+    <div class="container page-hero__inner">
+      <span class="eyebrow eyebrow--light">제품 카탈로그</span>
+      <h1>생산 라인을 더 안정적으로 만드는 연마재</h1>
+      <p>
+        제품군을 선택한 후 용도, 스펙, 가용 옵션을 확인해 주십시오. 결정하기 어렵다면
+        가공 소재와 작업 방식을 알려 주시면 스펙 확정에 도움을 드립니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container">
+      <div class="catalog-grid">
+        {
+          productCategories.map((product, index) => (
+            <article class="catalog-card">
+              <div class="catalog-card__media">
+                <img src={product.image} alt={`墨泰 ${product.name}`} width="560" height="420" loading="lazy" />
+                <span class="catalog-card__number">0{index + 1}</span>
+              </div>
+              <div class="catalog-card__body">
+                <h2><a href={`/products/${product.slug}`}>{product.name}</a></h2>
+                <p>{product.description}</p>
+                <h3>적용 분야</h3>
+                <ul class="check-list">
+                  {product.applications.map((application) => <li>{application}</li>)}
+                </ul>
+                <a class="button button--outline button--small" href={`/products/${product.slug}`}>
+                  전체 스펙 보기
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="model-browser" data-model-browser>
+        <div class="section-heading section-heading--split">
+          <div>
+            <span class="eyebrow">공급 가능 규격</span>
+            <h2>당신의 기기와 맞춘 규격을 검색하세요</h2>
+          </div>
+          <label class="model-search">
+            <span class="sr-only">규격 또는 제품군 검색</span>
+            <input type="search" placeholder="예: 533, 1520, 6인치, Hook & Loop" data-model-search />
+          </label>
+        </div>
+
+        <div class="model-filters" role="group" aria-label="제품군별 필터">
+          <button class="model-filter is-active" type="button" data-model-filter="all">전체 ({models.length})</button>
+          <button class="model-filter" type="button" data-model-filter="belt">샌딩 벨트 ({beltModels.length})</button>
+          <button class="model-filter" type="button" data-model-filter="disc">샌딩 디스크 ({discModels.length})</button>
+        </div>
+
+        <p class="model-count" data-model-count aria-live="polite">{models.length}개 규격 표시 중</p>
+
+        <div class="model-table" data-model-table>
+          <div class="model-table__head" aria-hidden="true">
+            <span>규격</span><span>제품군</span><span>그릿 등급</span><span>고정 방식</span><span></span>
+          </div>
+          {
+            models.map((model) => (
+              <a class="model-row" href={`/products/models/${model.slug}`} data-model-group={model.type} data-model-text={`${model.name} ${model.sizeLabel} ${model.family}`.toLowerCase()}>
+                <span class="model-row__name">{model.name}</span>
+                <span class="model-row__family">{model.family}</span>
+                <span class="model-row__grit">{model.gritRange.length}개 등급 · {model.gritRange[0]}–{model.gritRange[model.gritRange.length - 1]}</span>
+                <span class="model-row__attachment">{model.attachment}</span>
+                <span class="model-row__cta">자세히 →</span>
+              </a>
+            ))
+          }
+        </div>
+
+        <p class="model-empty" data-model-empty hidden>검색 결과와 일치하는 규격이 없습니다. 다른 키워드로 시도하거나, 문의 양식을 통해 스펙을 보내 주십시오.</p>
+      </div>
+
+      <div class="catalog-guide">
+        <div>
+          <span class="eyebrow">어떤 스펙이 적합할지 모르시나요?</span>
+          <h2>제품 이름이 아니라 용도에서 시작하세요</h2>
+          <p>
+            가공 소재, 사용 기종, 원하는 마감 종류를 알려 주십시오. 공구 형식과 그릿, 베이스
+            선택을 도와드리고, 명확한 견적을 보내 드립니다.
+          </p>
+        </div>
+        <div class="catalog-guide__steps">
+          <div><strong>01</strong><span>산업 분야 선택</span></div>
+          <div><strong>02</strong><span>추천 제품 확인</span></div>
+          <div><strong>03</strong><span>스펙과 수량 전송</span></div>
+        </div>
+        <div class="catalog-guide__actions">
+          <a class="button button--primary" href="/industries">솔루션 탐색하기</a>
+          <a class="button button--outline" href="/resources/abrasive-grit-guide">그릿 가이드</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="여러 제품의 스펙을 비교하시나요?"
+    text="제품 목록과 규격, 수량을 보내 주십시오. 검토 후 구매팀이 비교하기 용이한 통합 견적을 제공합니다."
+  />
+
+  <script>
+    const browser = document.querySelector('[data-model-browser]');
+    if (browser) {
+      const search = browser.querySelector<HTMLInputElement>('[data-model-search]');
+      const rows = [...browser.querySelectorAll<HTMLElement>('[data-model-group]')];
+      const filters = [...browser.querySelectorAll<HTMLButtonElement>('[data-model-filter]')];
+      const count = browser.querySelector<HTMLElement>('[data-model-count]');
+      const empty = browser.querySelector<HTMLElement>('[data-model-empty]');
+      let activeGroup = 'all';
+
+      const apply = () => {
+        const term = search?.value.trim().toLowerCase() ?? '';
+        let visible = 0;
+
+        for (const row of rows) {
+          const matchesGroup = activeGroup === 'all' || row.dataset.modelGroup === activeGroup;
+          const matchesTerm = !term || (row.dataset.modelText ?? '').includes(term);
+          const show = matchesGroup && matchesTerm;
+          row.hidden = !show;
+          if (show) visible += 1;
+        }
+
+        if (count) count.textContent = `${visible}개 규격 표시 중`;
+        if (empty) empty.hidden = visible > 0;
+      };
+
+      search?.addEventListener('input', apply);
+
+      for (const filter of filters) {
+        filter.addEventListener('click', () => {
+          activeGroup = filter.dataset.modelFilter ?? 'all';
+          filters.forEach((item) => item.classList.toggle('is-active', item === filter));
+          apply();
+        });
+      }
+    }
+  </script>
+</Layout>

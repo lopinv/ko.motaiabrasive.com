@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../data/site';
+---
+
+<Layout
+  title="墨泰 연마재 공장 문의 | 견적 요청"
+  description="중국 후베이 墨泰 연마재 팀에 이메일 또는 WhatsApp으로 직접 연락하거나, 문의 양식을 통해 견적을 요청해 주십시오."
+  image="/images/factory.jpg"
+>
+  <section class="page-hero page-hero--contact">
+    <div class="container page-hero__inner">
+      <span class="eyebrow eyebrow--light">문의하기</span>
+      <h1>가장 적합한 채널로 주문을 시작하세요</h1>
+      <p>
+        빠른 문의에는 WhatsApp을 활용하세요. 스펙·수량·단가 확인이 필요한 주문은
+        전용 문의 양식을 사용해 모든 세부 정보를 한 번에 보내 주십시오.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container contact-layout">
+      <div class="contact-methods">
+        <article class="contact-card contact-card--primary">
+          <span class="eyebrow eyebrow--light">가장 빠름</span>
+          <h2>WhatsApp 채팅</h2>
+          <p>제품 이미지 또는 번호와 수량, 목적지를 보내 주십시오. 견적 발송 전 스펙을 채팅으로 확인합니다.</p>
+          <a class="button button--accent" href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener nofollow">WhatsApp 열기</a>
+        </article>
+        <article class="contact-card">
+          <span class="eyebrow">정식 소통 채널</span>
+          <h2>이메일</h2>
+          <p>OEM 주문, 정기 공급, 로고·스펙 파일 전달에 적합합니다.</p>
+          <a class="button button--outline" href={`mailto:${SITE.email}`} dir="ltr">{SITE.email}</a>
+        </article>
+        <article class="contact-card">
+          <span class="eyebrow">전화</span>
+          <h2>직통 통화</h2>
+          <p>상세 조건 협의 또는 일정 확인 후 공장 방문 조율에 활용합니다.</p>
+          <a class="button button--outline" href={`tel:${SITE.phone.replace(/\s/g, '')}`} dir="ltr">{SITE.phone}</a>
+        </article>
+      </div>
+
+      <div class="contact-details">
+        <span class="eyebrow">공장 정보</span>
+        <h2>墨泰 연마재</h2>
+        <dl class="spec-dl">
+          <div><dt>회사명</dt><dd dir="ltr">{SITE.legalName}</dd></div>
+          <div><dt>주소</dt><dd>{SITE.addressAr}</dd></div>
+          <div><dt>응대 시간</dt><dd>월요일~토요일 (공장 현지 기준)</dd></div>
+          <div><dt>대응 언어</dt><dd>한국어, 영어, 중국어</dd></div>
+        </dl>
+        <p class="fine-print">실제 공급 일정 사이에 문의를 접수합니다. 휴일에 대한 답변 지연을 막기 위해 WhatsApp으로 주제와 함께 문의해 주십시오.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="견적 요청 준비되셨나요?" text="제품 종류, 규격, 수량, 배송 목적지를 미리 정리해 주시면 나머지 세부 사항까지 함께 마무리하겠습니다." />
+</Layout>

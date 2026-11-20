@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import FaqItem from '../components/FaqItem.astro';
+
+const breadcrumbs = [
+  { name: '홈', href: '/' },
+  { name: '공급 및 OEM', href: '/shipping-oem' },
+];
+
+const shippingSteps = [
+  { title: '스펙 확정', text: '생산 전 구매자와 제품, 규격, 등급, 베이스, 수량, 포장을 확정합니다.' },
+  { title: '생산 및 가공', text: '승인된 스펙에 따라 가공합니다. 샘플 승인 후 생산 기간: 3–5주(예상).' },
+  { title: '포장 및 준비', text: '산업용 또는 OEM 포장. 표준 박스 또는 협의에 따른 맞춤 포장. 운송 서류는 이 단계에서 준비합니다.' },
+  { title: '해운/공수', text: '한국행 해운: 3–7일. 공수는 빠르지만 비용이 높습니다. 구매자 요청에 따라 운송을 대행하거나 FOB로 처리합니다.' },
+  { title: '통관', text: '수입자가 수입국의 수입 서류를 제출합니다(제품에 따라 수입국 규정이 다름). 통관 지원을 위해 CoC·COA를 제공합니다.' },
+  { title: '인도', text: '합의된 인코텀즈(Incoterms) 조건(FOB/CIF/DDP)에 따라 항만 또는 창고에 인도합니다.' },
+];
+
+const oemSteps = [
+  { title: '브랜드 파일', text: '구매자가 로고 파일(벡터/AI), 포장 도면, 브랜드 컬러를 보내 주시면 됩니다.' },
+  { title: '실행성 검토', text: '생산 팀과 OEM 요건을 검토하고, MOQ·비용·납기 영향을 확정합니다.' },
+  { title: '샘플 승인', text: '요청한 브랜드로 샘플을 제작하고, 대량 생산 전에 구매자가 승인합니다.' },
+  { title: '대량 생산', text: '승인 후 확정된 브랜드와 포장을 사용해 대량 생산을 시작합니다.' },
+];
+
+const packagingOptions = [
+  { type: '산업용 포장', desc: '도매용 표준 플라스틱 박스 또는 상자(패키지 박스). 유통상·판매망에 적합합니다.' },
+  { type: 'OEM 포장', desc: '구매자 로고와 맞춤 인쇄 박스. 브랜드 파일과 디자인이 필요합니다.' },
+  { type: '방습 포장', desc: '장거리 해운 시 추가 보호. 장거리 수출 시 권장합니다.' },
+];
+
+const shippingFaq = [
+  {
+    q: '중국에서 한국까지 총 공급 기간은 얼마나 되나요?',
+    a: '생산: 스펙·샘플 승인 후 3–5주. 해운: 3–7일. 총 예상: 4–6주. 공수는 빠르지만(1–2일) 비용이 크게 높습니다.',
+  },
+  {
+    q: '적합증명서(CoC)와 분석증명서(COA)를 제공하나요?',
+    a: '네. 제품 스펙에 맞춰 CoC·COA를 제공합니다. 지역 인증(제품별 상이)은 수입국의 수입자 책임이지만, 통관 지원 서류 준비에 협력합니다.',
+  },
+  {
+    q: '무슨 거래 조건(인코텀즈)이 가능한가요?',
+    a: 'FOB(중국 선적항 인도), CIF(가격+보험+운송료로 목적항까지), DDP(수입자 창고 관세 포함 인도). 물류 파트너를 통해 운송을 대행하거나, 구매자 지정 통관 업체와 협력합니다.',
+  },
+  {
+    q: 'OEM 주문의 최소 수량(MOQ)은 어떻게 되나요?',
+    a: 'MOQ는 제품, 커스텀 옵션, 포장에 따라 스펙별로 개별 확정됩니다. 표준 제품은 MOQ가 낮고, 로고·인쇄 포장이 포함된 OEM은 수량이 높습니다. 정확한 수량은 견적으로 확인해 주십시오.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: shippingFaq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Layout
+  title="중국에서 한국까지 공급 및 OEM | 운송·포장 단계 | 墨泰"
+  description="완전한 공급 가이드: 중국에서 한국까지 운송 단계(FOB/CIF/DDP), 공급 기간, 포장 및 OEM 옵션, CoC/COA 서류. 산업용 연마재 구매자를 위한 실무 정보."
+  image="/images/factory.jpg"
+  breadcrumbs={breadcrumbs}
+  jsonLd={[faqJsonLd]}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <span class="eyebrow eyebrow--light">공급 및 제조</span>
+      <h1>중국에서 한국까지 공급 및 OEM</h1>
+      <p>
+        스펙 확정부터 인도까지: 운송 단계, 포장 옵션, OEM 절차,
+        그리고 한국 통관을 지원하는 서류 안내.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container">
+      <!--  -->
+      <div class="content-block">
+        <span class="eyebrow">공급 단계</span>
+        <h2>스펙부터 인도까지 6단계</h2>
+        <ol class="numbered-list">
+          {shippingSteps.map((step) => (
+            <li><strong>{step.title}</strong><p>{step.text}</p></li>
+          ))}
+        </ol>
+      </div>
+
+      <!-- OEM  -->
+      <div class="content-block">
+        <span class="eyebrow">주문자 브랜드 제조</span>
+        <h2>OEM 절차 4단계</h2>
+        <div class="process-cards">
+          {oemSteps.map((step, index) => (
+            <article class="process-card">
+              <span class="process-card__num">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <!--  -->
+      <div class="content-block">
+        <span class="eyebrow">포장 옵션</span>
+        <h2>가용 포장 종류</h2>
+        <div class="knowledge-hub__grid">
+          {packagingOptions.map((p) => (
+            <div class="sidebar-card">
+              <strong>{p.type}</strong>
+              <p>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="content-block">
+        <span class="eyebrow">자주 묻는 질문</span>
+        <h2>공급 및 운송 관련 질문</h2>
+        <div class="faq-list">
+          {shippingFaq.map((item) => <FaqItem question={item.q} answer={item.a} />)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="공급 주문 준비되셨나요?"
+    text="스펙, 수량, 배송 목적지, 원하는 인도 조건을 보내 주십시오. 요청 사항을 검토한 후 명확한 상업 견적으로 회신드립니다."
+  />
+</Layout>

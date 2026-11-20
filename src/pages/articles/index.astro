@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { SITE } from '../../data/site';
+
+const articles = (await getCollection('articles')).sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime(),
+);
+
+/** 카테고리 slug → 한국어 라벨 (표시층 매핑, 데이터는 원본 slug 유지) */
+const categoryLabels: Record<string, string> = {
+  'product-comparison': '제품 비교',
+  'multi-product-comparison': '다중 비교',
+  'buying-guide': '구매 가이드',
+  'technical-guide': '기술 가이드',
+  'application-guide': '활용 가이드',
+  'process-tutorial': '공정 튜토리얼',
+  troubleshooting: '문제 해결',
+  'product-spec-detail': '스펙 상세',
+  'procurement-guide': '조달 가이드',
+  'wholesale-oem-guide': '도매 및 OEM',
+  'industry-market': '산업 시장',
+  'gcc-regional-sourcing': 'GCC 지역 조달',
+  'faq-buyers-guide': '구매자 FAQ',
+};
+
+/** 제품군 slug → 한국어명 (site.ts productCategories와 일치) */
+const familyLabels: Record<string, string> = {
+  'abrasive-belts': '샌딩 벨트',
+  'flap-discs': '플랩 디스크',
+  'sanding-discs': '샌딩 디스크',
+  'hook-loop': 'Hook & Loop',
+  'sanding-sponges': '샌딩 스펀지',
+};
+
+const catLabel = (slug: string) => categoryLabels[slug] ?? slug;
+const famLabel = (slug?: string) => (slug ? familyLabels[slug] ?? slug : '');
+
+const categories = [...new Set(articles.map((a) => a.data.category))].sort();
+
+const breadcrumbs = [
+  { name: '홈', href: '/' },
+  { name: '기술 기사', href: '/articles' },
+];
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '기술 기사 | 墨泰 연마재',
+  description:
+    '연마재 선택에 관한 한국어 기술 기사 라이브러리: 제품 비교, 구매·조달 가이드, 스펙 및 등급, GCC 지역 공급 안내.',
+  url: `${SITE.url}/articles`,
+  inLanguage: 'ko',
+  publisher: { '@id': `${SITE.url}/#organization` },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: articles.length,
+    itemListElement: articles.slice(0, 20).map((a, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE.url}/articles/${a.id}`,
+      name: a.data.title,
+    })),
+  },
+};
+---
+
+<Layout
+  title="연마재 기술 기사 | 墨泰"
+  description="한국어 기술 기사 라이브러리: 샌딩 벨트·디스크 비교, 구매 및 조달 가이드, 스펙과 등급, 산업 구매자를 위한 작업 문제 해결."
+  image="/images/grit-reference.png"
+  breadcrumbs={breadcrumbs}
+  jsonLd={[collectionJsonLd]}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <span class="eyebrow eyebrow--light">지식 라이브러리</span>
+      <h1>연마재 기술 기사</h1>
+      <p>
+        {articles.length}편의 기술 기사가 등급 선택, 제품 비교, 구매·조달 가이드,
+        작업 문제 해결을 다룹니다 — 산업용 연마재 구매자를 위해 작성되었습니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container">
+      <div class="articles-toolbar" data-articles-toolbar>
+        <label class="articles-search">
+          <span class="sr-only">기사 검색</span>
+          <svg aria-hidden="true" viewBox="0 0 20 20" width="16" height="16">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              d="M9 3.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Zm4 9 4 4"
+            ></path>
+          </svg>
+          <input
+            type="search"
+            data-articles-search
+            placeholder="제목 또는 키워드로 검색…"
+            aria-label="기사 검색"
+          />
+        </label>
+        <div class="articles-filters" role="group" aria-label="카테고리별 필터">
+          <button class="model-filter is-active" data-articles-filter="all" type="button">전체</button>
+          {
+            categories.map((cat) => (
+              <button class="model-filter" data-articles-filter={cat} type="button">
+                {catLabel(cat)}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="articles-count" data-articles-count>{articles.length}편</p>
+
+      <div class="articles-grid" data-articles-grid>
+        {
+          articles.map((article) => (
+            <article class="article-card" data-article-card data-category={article.data.category}>
+              <a class="article-card__link" href={`/articles/${article.id}`}>
+                <div class="article-card__meta">
+                  <span class="article-card__tag">{catLabel(article.data.category)}</span>
+                  {article.data.productFamily && (
+                    <span class="article-card__fam">{famLabel(article.data.productFamily)}</span>
+                  )}
+                </div>
+                <h2>{article.data.title}</h2>
+                <p>{article.data.description}</p>
+                <span class="article-card__more">
+                  기사 읽기
+                  <svg aria-hidden="true" viewBox="0 0 20 20" width="14" height="14">
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      d="M11 4l6 6-6 6M4 10h12"
+                    ></path>
+                  </svg>
+                </span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="articles-empty" data-articles-empty hidden>
+        검색 결과와 일치하는 기사가 없습니다 — 다른 키워드를 입력하거나 필터를 해제해 주십시오.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand
+    title="기사에서 답을 찾지 못하셨나요?"
+    text="기술 질문과 작업 스펙을 보내 주시면, 소재와 기기에 맞는 제안으로 회신드립니다."
+  />
+
+  <script>
+    // 기사 목록: 즉시 검색 + 카테고리별 필터 (/products의 모델 브라우저와 동일한 패턴)
+    const toolbar = document.querySelector<HTMLElement>('[data-articles-toolbar]');
+    const grid = document.querySelector<HTMLElement>('[data-articles-grid]');
+    if (toolbar && grid) {
+      const search = toolbar.querySelector<HTMLInputElement>('[data-articles-search]');
+      const filters = Array.from(toolbar.querySelectorAll<HTMLButtonElement>('[data-articles-filter]'));
+      const count = document.querySelector<HTMLElement>('[data-articles-count]');
+      const empty = document.querySelector<HTMLElement>('[data-articles-empty]');
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-article-card]'));
+
+      const apply = () => {
+        const q = (search?.value || '').trim().toLowerCase();
+        const active = filters.find((b) => b.classList.contains('is-active'));
+        const cat = active?.dataset.articlesFilter ?? 'all';
+        let shown = 0;
+        for (const card of cards) {
+          const text = (card.textContent || '').toLowerCase();
+          const matchCat = cat === 'all' || card.dataset.category === cat;
+          const matchQ = !q || text.includes(q);
+          const visible = matchCat && matchQ;
+          card.hidden = !visible;
+          if (visible) shown++;
+        }
+        if (count) count.textContent = shown + '편';
+        if (empty) empty.hidden = shown > 0;
+      };
+
+      search?.addEventListener('input', apply);
+      filters.forEach((btn) =>
+        btn.addEventListener('click', () => {
+          filters.forEach((b) => b.classList.toggle('is-active', b === btn));
+          apply();
+        }),
+      );
+      apply();
+    }
+  </script>
+</Layout>
